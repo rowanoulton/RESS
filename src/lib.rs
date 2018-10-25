@@ -162,7 +162,7 @@ impl Scanner {
                                 self.cursor = self.stream.len()
                                     - regex_pair.1.trim_left_matches(whitespace_or_line_term).len();
                                 let whitespace = &self.stream[prev_cursor..self.cursor];
-                                self.pending_new_line = whitespace.chars().any(|c| is_line_term(c));
+                                self.pending_new_line = whitespace.chars().any(is_line_term);
                             }
                             debug!(target: "ress", "{}: {:?}", if advance_cursor { "next regex item" } else {"look ahead"}, regex_pair.0);
                             Some(Item::new(regex_pair.0, span))
@@ -218,7 +218,7 @@ impl Scanner {
                         let whitespace = &self.stream[prev_cursor..self.cursor];
                         self.pending_new_line = whitespace
                             .chars()
-                            .any(|c| is_line_term(c));
+                            .any(is_line_term);
                     }
                     debug!(target: "ress", "{}: {:?}", if advance_cursor { "next item" } else {"look ahead"}, pair.0);
                     Some(Item::new(pair.0, span))
@@ -595,7 +595,7 @@ this.y = 0;
 
         // explicit reference to token
         assert!(i.token.is_keyword());
-        // implitic deref to token
+        // implicit deref to token
         assert!(i.is_keyword());
     }
 
